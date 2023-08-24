@@ -8,7 +8,7 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "src/pages"));
 
 //static server image
-// app.use(express.static("src/assets"));
+app.use(express.static("src/assets"));
 // parsing data from client
 app.use(express.urlencoded({ extended: false }));
 
