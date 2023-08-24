@@ -62,7 +62,7 @@ function projectDetail(req, res) {
     title: "Dumbways Project",
     content:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquaaccusamus sintDolor modi repudiandae",
-    image: "/images/img.jpg",
+    image: "https://i.imgur.com/1dlelFG.jpg",
   };
   res.render("project-detail", { data });
 }
