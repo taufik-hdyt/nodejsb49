@@ -50,99 +50,235 @@
     </nav>
     <!-- =================== end Nav -->
 
-    <div class="container my-4 w-50">
-      <h2 class="text-center">ADD MY PROJECT</h2>
+    <div class="container my-4" style="width: 500px;">
       <div class="form">
-        <form method="post" action="project">
-          <div>
-            <label for="name">Project Name</label>
-            <input name="name" class="form-control" type="text" id="name" />
-          </div>
-
-          <div class="d-flex gap-2 mt-2">
-            <div class="w-100">
-              <label for="input-project-name">Start Date</label>
-              <input
-                name="startDate"
-                class="form-control"
-                type="date"
-                id="input-start-date"
-              />
+        {{#if this.method}}
+          <h2 class="text-center">ADD MY PROJECT</h2>
+          <form method="post" action="project">
+            <div>
+              <label for="name">Project Name</label>
+              <input name="name" class="form-control" type="text" id="name" />
             </div>
-            <div class="w-100">
-              <label for="input-project-name">End Date</label>
-              <input
-                name="endDate"
-                class="form-control"
-                type="date"
-                id="input-end-date"
-              />
-            </div>
-          </div>
 
-          <div class="input mt-2">
-            <label for="input-description">Description</label>
-            <textarea
-              name="description"
-              style="resize: none; height: 200px"
-              class="form-control"
-              id="input-description"
-            ></textarea>
-          </div>
-
-          <div class="mt-3">
-            <p>Technologies</p>
-            <div class="row">
-              <div class="col">
-                <div>
-                  <input
-                    name="nodeJs"
-                    type="checkbox"
-                    id="check-nodejs"
-                    value="Node JS"
-                  />
-                  <label for="check-nodejs"> Node Js</label>
-                </div>
-                <div>
-                  <input name="php" type="checkbox" id="check-nextjs" />
-                  <label for="check-nextjs"> Php</label>
-                </div>
+            <div class="d-flex gap-2 mt-2">
+              <div class="w-100">
+                <label for="input-project-name">Start Date</label>
+                <input
+                  name="startDate"
+                  class="form-control"
+                  type="date"
+                  id="input-start-date"
+                />
               </div>
-              <div class="col">
-                <div>
-                  <input name="reactJs" type="checkbox" id="check-reactjs" />
-                  <label for="check-reactjs"> React Js</label>
-                </div>
-                <div>
-                  <input
-                    name="javascript"
-                    type="checkbox"
-                    id="check-javascript"
-                  />
-                  <label for="check-typescript"> Javascript</label>
-                </div>
+              <div class="w-100">
+                <label for="input-project-name">End Date</label>
+                <input
+                  name="endDate"
+                  class="form-control"
+                  type="date"
+                  id="input-end-date"
+                />
               </div>
             </div>
-          </div>
-          <!--  -->
 
-          <div class="input-group mb-3 mt-3">
-            <div class="input-group">
-              <input
-                type="file"
+            <div class="input mt-2">
+              <label for="input-description">Description</label>
+              <textarea
+                name="description"
+                style="resize: none; height: 100px"
                 class="form-control"
-                id="inputGroupFile04"
-                aria-describedby="inputGroupFileAddon04"
-                aria-label="Upload"
-                id="input-img"
+                id="input-description"
+              >{{this.description}}</textarea>
+            </div>
+
+            <div class="mt-3">
+              <p>Technologies</p>
+              <div class="row">
+                <div class="col">
+                  <div>
+                    <input name="nodeJs" type="checkbox" id="check-nodejs" />
+                    <label for="check-nodejs"> Node Js</label>
+                  </div>
+                  <div>
+                    <input name="php" type="checkbox" id="check-nextjs" />
+                    <label for="check-nextjs"> Php</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div>
+                    <input name="reactJs" type="checkbox" id="check-reactjs" />
+
+                    <label for="check-reactjs"> React Js</label>
+                  </div>
+                  <div>
+                    <input
+                      name="javascript"
+                      type="checkbox"
+                      id="check-javascript"
+                    />
+                    <label for="check-typescript"> Javascript</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--  -->
+
+            <div class="input-group mb-3 mt-3">
+              <div class="input-group">
+                <input
+                  name="gambar"
+                  type="file"
+                  class="form-control"
+                  id="inputGroupFile04"
+                  aria-describedby="inputGroupFileAddon04"
+                  aria-label="Upload"
+                />
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-danger">Submit</button>
+            </div>
+          </form>
+        {{/if}}
+
+        {{#if this.methodPut}}
+          <h2 class="text-center">UPDATE PROJECT</h2>
+          <form method="post" action="update-project/{{@index}}">
+            <div>
+              <label for="name">Project Name</label>
+              <input
+                value="{{this.data.name}}"
+                name="name"
+                class="form-control"
+                type="text"
+                id="name"
               />
             </div>
-          </div>
 
-          <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-danger">Submit</button>
-          </div>
-        </form>
+            <div class="d-flex gap-2 mt-2">
+              <div class="w-100">
+                <label for="input-project-name">Start Date</label>
+                <input
+                  name="startDate"
+                  class="form-control"
+                  type="date"
+                  id="input-start-date"
+                  value={{this.data.start_date}}
+                />
+              </div>
+              <div class="w-100">
+                <label for="input-project-name">End Date</label>
+                <input
+                  name="endDate"
+                  class="form-control"
+                  type="date"
+                  id="input-end-date"
+                  value={{this.data.end_date}}
+                />
+              </div>
+            </div>
+
+            <div class="input mt-2">
+              <label for="input-description">Description</label>
+              <textarea
+                name="description"
+                style="resize: none; height: 100px"
+                class="form-control"
+                id="input-description"
+              >{{this.data.description}}</textarea>
+            </div>
+
+            <div class="mt-3">
+              <p>Technologies</p>
+              <div class="row">
+                <div class="col">
+                  <div>
+                    {{#if this.data.tech.nodeJs}}
+                      <input
+                        name="nodeJs"
+                        type="checkbox"
+                        id="check-nodejs"
+                        checked
+                      />
+                    {{else}}
+                      <input name="nodeJs" type="checkbox" id="check-nodejs" />
+                    {{/if}}
+                    <label for="check-nodejs"> Node Js</label>
+                  </div>
+                  <div>
+                    {{#if this.data.tech.php}}
+                      <input
+                        name="php"
+                        type="checkbox"
+                        id="check-nextjs"
+                        checked
+                      />
+                    {{else}}
+                      <input name="php" type="checkbox" id="check-nextjs" />
+                    {{/if}}
+                    <label for="check-nextjs"> Php</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div>
+                    {{#if this.data.tech.reactJs}}
+                      <input
+                        name="reactJs"
+                        type="checkbox"
+                        id="check-reactjs"
+                        checked
+                      />
+                    {{else}}
+                      <input
+                        name="reactJs"
+                        type="checkbox"
+                        id="check-reactjs"
+                      />
+                    {{/if}}
+                    <label for="check-reactjs"> React Js</label>
+                  </div>
+                  <div>
+                    {{#if this.data.tech.javascript}}
+                      <input
+                        name="javascript"
+                        type="checkbox"
+                        id="check-javascript"
+                        checked
+                      />
+                    {{else}}
+                      <input
+                        name="javascript"
+                        type="checkbox"
+                        id="check-javascript"
+                      />
+                    {{/if}}
+                    <label for="check-typescript"> Javascript</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--  -->
+
+            <div class="input-group mb-3 mt-3">
+              <div class="input-group">
+                <input
+                  name="gambar"
+                  type="file"
+                  class="form-control"
+                  id="inputGroupFile04"
+                  aria-describedby="inputGroupFileAddon04"
+                  aria-label="Upload"
+                />
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-danger">Submit</button>
+            </div>
+          </form>
+        {{/if}}
+
       </div>
     </div>
     <script

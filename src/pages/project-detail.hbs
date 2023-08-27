@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Detail</title>
-    <link rel="stylesheet" href="css/blog.css" />
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -59,19 +59,23 @@
 
     <div class="container">
       <section class="mt-5">
-        <h2 class="text-center">{{data.title}}</h2>
+        <h2 class="text-center">{{data.name}}</h2>
 
         <div class="mt-5 row">
           <div class="col">
-            <img class="w-100" src={{data.image}} alt="coding" />
+            <img
+              class="w-100"
+              src="https://i.imgur.com/1dlelFG.jpg"
+              alt="coding"
+            />
           </div>
           <div class="col d-flex flex-column justify-content-between">
             <div>
               <p class="fw-bold">Duration</p>
               <div class="d-flex flex-column row-gap-2">
                 <p>
-                  <i class="fa-solid fa-calendar-days fa-2xl"></i>12 Jan 2021 -
-                  11 Feb 2021
+                  <i class="fa-solid fa-calendar-days fa-2xl"></i>
+                  12 Jan 2021 - 11 Feb 2021
                 </p>
                 <p><i class="fa-solid fa-earth-oceania fa-2xl"></i> 1 Month</p>
               </div>
@@ -94,7 +98,7 @@
         </div>
 
         <p style="text-align: justify;" class="mt-3">
-          {{data.content}}
+          {{data.description}}
         </p>
       </section>
     </div>
