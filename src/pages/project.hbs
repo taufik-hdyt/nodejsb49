@@ -51,7 +51,6 @@
     <!-- =================== end Nav -->
 
     <div class="container my-4" style="width: 500px;">
-      <input style="display: none;" name="index" value="{{@index}}" />
       <div class="form">
         {{#if this.method}}
           <h2 class="text-center">ADD MY PROJECT</h2>
@@ -145,7 +144,7 @@
 
         {{#if this.methodPut}}
           <h2 class="text-center">UPDATE PROJECT</h2>
-          <form method="post" action="update-project/{{@index}}">
+          <form method="post" action="{{@index}}">
             <div>
               <label for="name">Project Name</label>
               <input

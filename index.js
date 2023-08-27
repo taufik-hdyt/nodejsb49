@@ -106,7 +106,9 @@ function updateProject(req, res) {
   res.render("project", { methodPut, data: dataProject[id] });
 }
 function updateNewProject(req, res) {
-  const { name, description, startDate, endDate, index } = req.body;
+  const { id } = req.params;
+
+  const { name, description, startDate, endDate } = req.body;
   const durasi = duration(startDate, endDate);
   const newData = {
     name,
@@ -122,13 +124,9 @@ function updateNewProject(req, res) {
     },
   };
 
-  dataProject.splice(index, 1);
+  dataProject[id] = newData;
 
-  setTimeout(() => {
-    dataProject.push(newData);
-    res.redirect("/");
-  }, 1000);
-
-  //   dataProject.push(newData);
-  //   res.redirect("/");;
+  // dataProject.push(newData);
+  // dataProject.splice(index, 1);
+  res.redirect("/");
 }
