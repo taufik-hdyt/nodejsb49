@@ -129,6 +129,7 @@
 
               <a
                 target="_blank"
+                style="overflow: hidden; text-overflow: ellipsi; white-space: nowrap; text-overflow: ellipsis;"
                 class="fw-bolder mt-2"
                 href="/project-detail/{{this.id}}"
               >{{this.name}}</a>
@@ -153,11 +154,11 @@
               </div>
               <div class="d-flex gap-2 mt-3">
                 <a
-                  href="/update-project/{{@index}}"
+                  href="update-project/{{@index}}"
                   class="btn btn-danger w-100"
                 >edit</a>
                 <a
-                  href="/delete-project/{{@index}}"
+                  href="delete-project/{{@index}}"
                   class="btn btn-danger w-100"
                 >delete</a>
               </div>
