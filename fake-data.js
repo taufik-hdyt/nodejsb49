@@ -22,9 +22,9 @@ const dataProject = [
     start_date: "2023-08-26",
     end_date: "2024-08-26",
     tech: {
-      nodeJs: true,
+      nodeJs: false,
       reactJs: true,
-      php: false,
+      php: true,
       javascript: true,
     },
   },

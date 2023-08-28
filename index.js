@@ -28,7 +28,6 @@ app.post("/update-project/:id", updateNewProject);
 app.listen(PORT, () => console.log(`Server running on port${PORT}`));
 
 // callback function router
-
 function contactPost(req, res) {
   const { name, email, phone, subject, message } = req.body;
   if (
@@ -107,7 +106,6 @@ function updateProject(req, res) {
 }
 function updateNewProject(req, res) {
   const { id } = req.params;
-
   const { name, description, startDate, endDate } = req.body;
   const durasi = duration(startDate, endDate);
   const newData = {
@@ -124,9 +122,10 @@ function updateNewProject(req, res) {
     },
   };
 
-  dataProject[id] = newData;
+  // hapus array
+  delete dataProject[id];
 
-  // dataProject.push(newData);
-  // dataProject.splice(index, 1);
+  //push array baru
+  dataProject.push(newData);
   res.redirect("/");
 }
