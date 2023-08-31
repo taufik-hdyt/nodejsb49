@@ -139,7 +139,7 @@
                 target="_blank"
                 style="overflow: hidden; text-overflow: ellipsi; white-space: nowrap; text-overflow: ellipsis;"
                 class="fw-bolder mt-2"
-                href="/project-detail/{{@index}}"
+                href="/project-detail/{{this.id}}"
               >{{this.name}}</a>
 
               <p class="fw-lighter">durasi : {{this.duration}}</p>
@@ -147,26 +147,26 @@
                 {{this.description}}
               </p>
               <div class="d-flex gap-2 my-2">
-                {{#if this.tech.nodeJs}}
+                {{#if this.technologies.node_js}}
                   <i class="fa-brands fa-xl fa-node-js"></i>
                 {{/if}}
-                {{#if this.tech.reactJs}}
+                {{#if this.technologies.react_js}}
                   <i class="fa-brands fa-xl fa-react"></i>
                 {{/if}}
-                {{#if this.tech.php}}
+                {{#if this.technologies.php}}
                   <i class="fa-brands fa-xl fa-php"></i>
                 {{/if}}
-                {{#if this.tech.javascript}}
+                {{#if this.technologies.javascript}}
                   <i class="fa-brands fa-xl fa-js"></i>
                 {{/if}}
               </div>
               <div class="d-flex gap-2 mt-3">
                 <a
-                  href="update-project/{{@index}}"
+                  href="update-project/{{this.id}}"
                   class="btn btn-danger w-100"
                 >edit</a>
                 <a
-                  href="delete-project/{{@index}}"
+                  href="delete-project/{{this.id}}"
                   class="btn btn-danger w-100"
                 >delete</a>
               </div>

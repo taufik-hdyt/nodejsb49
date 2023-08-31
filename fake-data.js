@@ -8,7 +8,7 @@ const dataProject = [
     end_date: "2023-08-27",
     tech: {
       nodeJs: true,
-      reactJs: true,
+      reactJs: false,
       php: false,
       javascript: true,
     },
@@ -25,7 +25,7 @@ const dataProject = [
       nodeJs: false,
       reactJs: true,
       php: true,
-      javascript: true,
+      javascript: false,
     },
   },
   {
@@ -36,8 +36,8 @@ const dataProject = [
     start_date: "2023-08-26",
     end_date: "2023-09-26",
     tech: {
-      nodeJs: true,
-      reactJs: true,
+      nodeJs: false,
+      reactJs: false,
       php: false,
       javascript: true,
     },

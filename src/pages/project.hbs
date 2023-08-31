@@ -151,7 +151,7 @@
 
         {{#if this.methodPut}}
           <h2 class="text-center">UPDATE PROJECT</h2>
-          <form method="post" action="{{@index}}">
+          <form method="post" action="{{this.data.id}}">
             <div>
               <label for="name">Project Name</label>
               <input
@@ -201,7 +201,7 @@
               <div class="row">
                 <div class="col">
                   <div>
-                    {{#if this.data.tech.nodeJs}}
+                    {{#if this.data.technologies.node_js}}
                       <input
                         name="nodeJs"
                         type="checkbox"
@@ -214,7 +214,7 @@
                     <label for="check-nodejs"> Node Js</label>
                   </div>
                   <div>
-                    {{#if this.data.tech.php}}
+                    {{#if this.data.technologies.php}}
                       <input
                         name="php"
                         type="checkbox"
@@ -229,7 +229,7 @@
                 </div>
                 <div class="col">
                   <div>
-                    {{#if this.data.tech.reactJs}}
+                    {{#if this.data.technologies.react_js}}
                       <input
                         name="reactJs"
                         type="checkbox"
@@ -246,7 +246,7 @@
                     <label for="check-reactjs"> React Js</label>
                   </div>
                   <div>
-                    {{#if this.data.tech.javascript}}
+                    {{#if this.data.technologies.javascript}}
                       <input
                         name="javascript"
                         type="checkbox"
@@ -270,6 +270,7 @@
             <div class="input-group mb-3 mt-3">
               <div class="input-group">
                 <input
+                  value="{{this.data.image}}"
                   name="gambar"
                   type="file"
                   class="form-control"
