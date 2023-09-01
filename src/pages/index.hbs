@@ -52,12 +52,31 @@
                 href="/"
               >Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/project">Add Project</a>
-            </li>
+            {{#if isLogin}}
+              <li class="nav-item">
+                <a class="nav-link" href="/project">Add Project</a>
+              </li>
+            {{/if}}
           </ul>
 
-          <a class="btn btn-danger" href="/contact">Contact me</a>
+          <div class="d-flex align-items-center gap-5">
+            <div class="d-flex gap-4 align-items-center">
+              {{#if isLogin}}
+                <div class="d-flex gap-1 align-items-center">
+                  <i class="fa-solid fa-user"></i>
+                  <text class="text-black fw-semibold">{{user}}</text>
+                </div>
+              {{else}}
+                <a class="text-black" href="/register">Register</a>
+              {{/if}}
+              {{#if isLogin}}
+                <a class="text-black" href="/logout">Logout</a>
+              {{else}}
+                <a class="text-black" href="/login">Login</a>
+              {{/if}}
+            </div>
+            <a class="btn btn-danger" href="/contact">Contact me</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -128,48 +147,62 @@
       <div class="mt-5">
         <div id="post" class="gap-2 d-flex flex-wrap">
           {{#each dataProject}}
-            <div class="card p-3" style="width: 300px; height: 400px;">
-              <img
-                class="img-cover w-100"
-                src="https://i.imgur.com/1dlelFG.jpg"
-                alt="image"
-              />
+            <div class="card p-3" style="width: 300px;">
+              <div>
+                <div>
+                  <img
+                    class="img-cover w-100 mb-2"
+                    style="height: 160px;"
+                    src="{{this.image}}"
+                    alt="image"
+                  />
+                  <span class="bg-dark-subtle text-white px-2 w-100">author :
+                    {{this.author}}</span>
+                </div>
 
-              <a
-                target="_blank"
-                style="overflow: hidden; text-overflow: ellipsi; white-space: nowrap; text-overflow: ellipsis;"
-                class="fw-bolder mt-2"
-                href="/project-detail/{{this.id}}"
-              >{{this.name}}</a>
+                <a
+                  target="_blank"
+                  style="overflow: hidden; text-overflow: ellipsi; white-space: nowrap; text-overflow: ellipsis;"
+                  class="fw-bolder"
+                  href="/project-detail/{{this.id}}"
+                >
+                  {{this.name}}
+                </a>
 
-              <p class="fw-lighter">durasi : {{this.duration}}</p>
-              <p style="text-align: justify; height: 50px; overflow: hidden ;">
-                {{this.description}}
-              </p>
-              <div class="d-flex gap-2 my-2">
-                {{#if this.technologies.node_js}}
-                  <i class="fa-brands fa-xl fa-node-js"></i>
-                {{/if}}
-                {{#if this.technologies.react_js}}
-                  <i class="fa-brands fa-xl fa-react"></i>
-                {{/if}}
-                {{#if this.technologies.php}}
-                  <i class="fa-brands fa-xl fa-php"></i>
-                {{/if}}
-                {{#if this.technologies.javascript}}
-                  <i class="fa-brands fa-xl fa-js"></i>
-                {{/if}}
+                <p class="fw-lighter">durasi : {{this.duration}}</p>
+                <p
+                  style="text-align: justify; height: 50px; overflow: hidden ;"
+                >
+                  {{this.description}}
+                </p>
+                <div class="d-flex gap-2 my-2">
+                  {{#if this.technologies.node_js}}
+                    <i class="fa-brands fa-xl fa-node-js"></i>
+                  {{/if}}
+                  {{#if this.technologies.react_js}}
+                    <i class="fa-brands fa-xl fa-react"></i>
+                  {{/if}}
+                  {{#if this.technologies.php}}
+                    <i class="fa-brands fa-xl fa-php"></i>
+                  {{/if}}
+                  {{#if this.technologies.javascript}}
+                    <i class="fa-brands fa-xl fa-js"></i>
+                  {{/if}}
+                </div>
               </div>
-              <div class="d-flex gap-2 mt-3">
-                <a
-                  href="update-project/{{this.id}}"
-                  class="btn btn-danger w-100"
-                >edit</a>
-                <a
-                  href="delete-project/{{this.id}}"
-                  class="btn btn-danger w-100"
-                >delete</a>
-              </div>
+              {{#if this.isLogin}}
+                <div class="d-flex gap-2 mt-3">
+                  <a
+                    href="update-project/{{this.id}}"
+                    class="btn btn-danger w-100"
+                  >edit</a>
+                  <a
+                    href="delete-project/{{this.id}}"
+                    class="btn btn-danger w-100"
+                  >delete</a>
+                </div>
+              {{/if}}
+
             </div>
           {{/each}}
 

@@ -2,15 +2,36 @@ const express = require("express");
 const app = express();
 const PORT = 5000;
 const path = require("path");
-const dataProject = require("./fake-data");
+const bcrypt = require("bcrypt");
+const session = require("express-session");
+const flash = require("express-flash");
+const upload = require("./src/middlewares/uploadFIles");
+// const dataProject = require("./fake-data");
 
 // html to hbs
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "src/pages"));
 
+// setup FLASH
+app.use(flash());
+// setup session
+app.use(
+  session({
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 2,
+    },
+    store: new session.MemoryStore(),
+    saveUninitialized: true,
+    resave: false,
+    secret: "secretValue",
+  })
+);
+
 //static server image
 app.use(express.static("src/assets"));
-// parsing data from client
+app.use(express.static("src/uploads"));
 app.use(express.urlencoded({ extended: false }));
 
 // sequelize init
@@ -20,7 +41,7 @@ const sequelize = new Sequelize(config.development);
 //router
 app.get("/", home);
 app.get("/project", project);
-app.post("/project", addProject);
+app.post("/add-project", upload.single("gambar"), addProject);
 app.get("/contact", contact);
 app.post("/contact", contactPost);
 app.get("/project-detail/:id", projectDetail);
@@ -30,6 +51,66 @@ app.post("/update-project/:id", updateNewProject);
 
 // server port
 app.listen(PORT, () => console.log(`Server running on port${PORT}`));
+
+// LOGIN AND REGISTER ROUTER
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+app.post("/register", async function (req, res) {
+  try {
+    const { name, email, password } = req.body;
+    const query = `SELECT * FROM "Users" WHERE email='${email}'`;
+    await sequelize.query(query, { type: QueryTypes.SELECT });
+
+    const salt = 10;
+    await bcrypt.hash(password, salt, (err, hashPassword) => {
+      sequelize.query(
+        `INSERT INTO "Users" (name,email,password, "createdAt","updatedAt") VALUES
+        ('${name}', '${email}','${hashPassword}',NOW(),NOW()) `
+      );
+      res.redirect("/login");
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+app.post("/login", async function (req, res) {
+  try {
+    const { email, password } = req.body;
+    const query = `SELECT * FROM "Users" WHERE email='${email}'`;
+    let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
+    console.log(obj);
+    if (!obj.length) {
+      req.flash("danger", "User not registered");
+      return res.redirect("/login");
+    }
+
+    await bcrypt.compare(password, obj[0].password, (err, result) => {
+      if (!result) {
+        req.flash("danger", "Password wrong");
+        return res.redirect("/login");
+      } else {
+        req.session.isLogin = true;
+        req.session.user = obj[0].name;
+        req.session.idUser = obj[0].id;
+        req.flash("success", "login success");
+        res.redirect("/");
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Logout
+app.get("/logout", (req, res) => {
+  req.session.destroy(function (err) {
+    res.redirect("/login");
+  });
+});
 
 // callback function router
 function contactPost(req, res) {
@@ -46,14 +127,32 @@ function contactPost(req, res) {
 }
 async function home(req, res) {
   try {
-    const query = `SELECT id, name, description, start_date, end_date, duration,image,technologies
-    FROM "Projects";`;
+    const query = `SELECT
+    "Projects".name,"Users".name AS author,description,image,duration,technologies FROM
+    "Projects" LEFT JOIN "Users" ON "Projects".author = "Users".id ORDER BY "Projects".id `;
     let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
     const data = obj.map((res) => ({
       ...res,
+      isLogin: req.session.isLogin,
     }));
 
-    res.render("index", { dataProject: data });
+    const dataFilter = data.filter((e) => e.author === req.session.user);
+    console.log(req.session.user);
+
+    if (!req.session.isLogin) {
+      res.render("index", {
+        dataProject: data,
+        user: req.session.user,
+        isLogin: req.session.isLogin,
+      });
+    } else {
+      console.log(dataFilter);
+      res.render("index", {
+        dataProject: dataFilter,
+        user: req.session.user,
+        isLogin: req.session.isLogin,
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -61,7 +160,15 @@ async function home(req, res) {
 
 function project(req, res) {
   const methodPost = "post";
-  res.render("project", { method: methodPost });
+  if (req.session.user) {
+    res.render("project", {
+      method: methodPost,
+      user: req.session.user,
+      isLogin: req.session.isLogin,
+    });
+  } else {
+    res.redirect("/login");
+  }
 }
 
 function duration(startDate, endDate) {
@@ -89,8 +196,9 @@ async function addProject(req, res) {
       reactJs,
       php,
       javascript,
-      gambar,
     } = req.body;
+    const image = req.file.filename;
+    const author = req.session.idUser;
 
     const durasi = duration(startDate, endDate);
     const tech = {
@@ -99,10 +207,12 @@ async function addProject(req, res) {
       php: php === "on" ? true : false,
       javascript: javascript === "on" ? true : false,
     };
-    await sequelize.query(`INSERT INTO "Projects" (name,description,start_date,end_date,duration,image,technologies) VALUES
-    ('${name}','${description}','${startDate}','${endDate}','${durasi}','${gambar}','{"node_js": ${tech.node_js},"react_js":${tech.react_js},"php": ${tech.php},"javascript": ${tech.javascript}}')`);
+    await sequelize.query(`INSERT INTO "Projects" (author,name,description,start_date,end_date,duration,image,technologies) VALUES
+    ('${author}','${name}','${description}','${startDate}','${endDate}','${durasi}','${image}','{"node_js": ${tech.node_js},"react_js":${tech.react_js},"php": ${tech.php},"javascript": ${tech.javascript}}')`);
 
-    res.redirect("/");
+    setTimeout(() => {
+      res.redirect("/");
+    }, 10000);
   } catch (err) {
     console.log(err);
   }
@@ -126,7 +236,10 @@ async function addProject(req, res) {
 }
 
 function contact(req, res) {
-  res.render("contact");
+  res.render("contact", {
+    user: req.session.user,
+    isLogin: req.session.isLogin,
+  });
 }
 
 async function projectDetail(req, res) {
@@ -135,7 +248,11 @@ async function projectDetail(req, res) {
     const query = `SELECT * FROM "Projects" WHERE id =${id}`;
     const obj = await sequelize.query(query, { type: QueryTypes.SELECT });
     const data = obj.map((e) => ({ ...e }));
-    res.render("project-detail", { data: data[0] });
+    res.render("project-detail", {
+      data: data[0],
+      user: req.session.user,
+      isLogin: req.session.isLogin,
+    });
   } catch (err) {
     console.log(err);
   }
@@ -161,7 +278,16 @@ async function updateProject(req, res) {
       ...res,
     }));
     const methodPut = "put";
-    res.render("project", { methodPut, data: dataUpdate[0] });
+    if (req.session.user) {
+      res.render("project", {
+        methodPut,
+        data: dataUpdate[0],
+        user: req.session.user,
+        isLogin: req.session.isLogin,
+      });
+    } else {
+      res.redirect("/login");
+    }
   } catch (err) {
     console.log(err);
   }
@@ -169,16 +295,16 @@ async function updateProject(req, res) {
 async function updateNewProject(req, res) {
   try {
     const { id } = req.params;
-    console.log(id);
+
     const {
       name,
       startDate,
       endDate,
-      description,
       nodeJs,
       reactJs,
       php,
       javascript,
+      description,
       gambar,
     } = req.body;
     const durasi = duration(startDate, endDate);
@@ -188,34 +314,11 @@ async function updateNewProject(req, res) {
       php: php === "on" ? true : false,
       javascript: javascript === "on" ? true : false,
     };
-    const query = `UPDATE "Projects" SET name=${name},description=${description},start_date=${startDate}, end_date=${endDate},duration=${durasi},image=${gambar},'technologies={"node_js":${tech.node_js},"react_js":${tech.react_js},
-    "php":${tech.php},"javascript":${tech.javascript}}' WHERE id=${id}
-  }`;
-    await sequelize.query(query, {
-      type: QueryTypes.UPDATE,
-    });
+    const query = `UPDATE "Projects" SET name=${name},description=${description},start_date=${startDate}, end_date=${endDate},duration=${durasi},image=${gambar},technologies='{"node_js":${tech.node_js},"react_js":${tech.react_js},
+    "php":${tech.php},"javascript":${tech.javascript}}' WHERE id=${id}`;
+    await sequelize.query(query);
     res.redirect("/");
   } catch (err) {
     console.log(err);
   }
-
-  // const durasi = duration(startDate, endDate);
-  // const newData = {
-  //   name,
-  //   description,
-  //   duration: durasi,
-  //   start_date: startDate,
-  //   end_date: endDate,
-  //   tech: {
-  //     nodeJs: req.body.nodeJs !== undefined,
-  //     reactJs: req.body.reactJs !== undefined,
-  //     php: req.body.php !== undefined,
-  //     javascript: req.body.javascript !== undefined,
-  //   },
-  // };
-  // // hapus array
-  // delete dataProject[id];
-  // //push array baru
-  // dataProject.push(newData);
-  // res.redirect("/");
 }

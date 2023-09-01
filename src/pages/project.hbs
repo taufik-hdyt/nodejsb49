@@ -21,6 +21,7 @@
   </head>
   <body class="bg-dark-subtle">
     <!--  ============ Start Nav -->
+    <!--  ============ Start Nav -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container">
         <a class="navbar-brand" href="/">
@@ -46,22 +47,45 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link active fw-bolder" href="/project">Add Project</a>
-            </li>
+            {{#if isLogin}}
+              <li class="nav-item">
+                <a class="nav-link fw-bolder" href="/project">
+                  Add Project
+                </a>
+              </li>
+            {{/if}}
           </ul>
 
-          <a class="btn btn-danger" href="/contact">Contact me</a>
+          <div class="d-flex align-items-center gap-3">
+            <div class="d-flex gap-3 align-items-center">
+              {{#if user}}
+                <text class="text-black fw-semibold">@{{user}}</text>
+              {{else}}
+                <a class="text-black" href="/register">Register</a>
+              {{/if}}
+              {{#if user}}
+                <a class="text-black" href="/login">Logout</a>
+              {{else}}
+                <a class="text-black" href="/login">Login</a>
+              {{/if}}
+            </div>
+            <a class="btn btn-danger" href="/contact">Contact me</a>
+          </div>
         </div>
       </div>
     </nav>
+    <!-- =================== end Nav -->
     <!-- =================== end Nav -->
 
     <div class="container my-4" style="width: 500px;">
       <div class="form">
         {{#if this.method}}
           <h2 class="text-center">ADD MY PROJECT</h2>
-          <form method="post" action="project">
+          <form
+            method="post"
+            action="/add-project"
+            enctype="multipart/form-data"
+          >
             <div>
               <label for="name">Project Name</label>
               <input name="name" class="form-control" type="text" id="name" />
@@ -149,9 +173,13 @@
           </form>
         {{/if}}
 
-        {{#if this.methodPut}}
+        {{!-- {{#if this.methodPut}}
           <h2 class="text-center">UPDATE PROJECT</h2>
-          <form method="post" action="{{this.data.id}}">
+          <form
+            method="post"
+            action="/update-project/29"
+            enctype="multipart/form-data"
+          >
             <div>
               <label for="name">Project Name</label>
               <input
@@ -285,7 +313,7 @@
               <button type="submit" class="btn btn-danger">Submit</button>
             </div>
           </form>
-        {{/if}}
+        {{/if}} --}}
 
       </div>
     </div>

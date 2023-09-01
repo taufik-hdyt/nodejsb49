@@ -9,6 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      author: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+      },
       name: {
         type: Sequelize.STRING,
       },
@@ -16,45 +23,25 @@ module.exports = {
         type: Sequelize.STRING,
       },
       start_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       end_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       duration: {
         type: Sequelize.STRING,
-      },
-      node_js: {
-        type: Sequelize.BOOLEAN,
-      },
-      react_js: {
-        type: Sequelize.BOOLEAN,
-      },
-      php: {
-        type: Sequelize.BOOLEAN,
-      },
-      javascript: {
-        type: Sequelize.BOOLEAN,
       },
       image: {
         type: Sequelize.STRING,
       },
       technologies: {
-        type: Sequelize.JSON,
+        type: Sequelize.JSONB,
         defaultValue: {
           node_js: false,
           react_js: false,
           php: false,
           javascript: false,
         },
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
       },
     });
   },
