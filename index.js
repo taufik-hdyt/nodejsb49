@@ -149,7 +149,6 @@ async function home(req, res) {
         isLogin: req.session.isLogin,
       });
     } else {
-      console.log(dataFilter);
       res.render("index", {
         dataProject: dataFilter,
         user: req.session.user,
