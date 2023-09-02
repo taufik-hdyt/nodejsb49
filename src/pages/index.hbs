@@ -18,15 +18,14 @@
       rel="stylesheet"
     />
     <style>
-      *{ font-family: "Poppins" ,sans-serif; } a { text-decoration: none; }
-
+      * { font-family: "Poppins", sans-serif; } a { text-decoration: none; }
     </style>
   </head>
   <body>
     <!--  ============ Start Nav -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container">
-        <a class="navbar-brand" href="/">
+      <div class=" container-sm container-md container-lg">
+        <a class="navbar-brand " href="/">
           <img
             style="width: 40px"
             src="https://i.imgur.com/y0cqB7Z.png"
@@ -83,13 +82,14 @@
     </nav>
     <!-- =================== end Nav -->
 
-    <div class="bg-white">
+    <div class="bg-white p-3">
+      <div class="row p-2 justify-content-center">
       <div
-        class="container my-5 w-50 mx-auto row shadow-sm bg-dark-subtle rounded-2 p-3"
+        class="container col col-md-9 col-lg-6 col-sm-12 col-12  my-3 mx-auto row-cols-12 row  shadow-sm bg-dark-subtle rounded-2 p-3"
       >
-        <div class="col-7">
+        <div class="col col-12 col-md-7  ">
           <h2>Hi Welcome</h2>
-          <p style="text-align: justify;">
+          <p style="text-align: justify">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum
             hic delectus rem libero assumenda maiores non natus nihil inventore
             beatae quam ab pariatur voluptate, aliquid eligendi quidem
@@ -104,7 +104,7 @@
               <i class="fa-solid fa-download"></i></a>
           </div>
 
-          <div class="social-media mt-5">
+          <div class="d-flex justify-content-center gap-2 mt-5 mb-sm-3">
             <a class="text-black" href="https://linkedin.com" target="_blank">
               <i class="fa-brands fa-linkedin fa-2xl"></i>
             </a>
@@ -128,7 +128,9 @@
           </div>
         </div>
 
-        <div class="shadow-sm rounded-bottom-2 text-center mt-5 col-5">
+        <div
+          class="shadow-sm rounded-bottom-2 text-center mt-5 col col-12 col-md-5  "
+        >
           <img
             width="100%"
             class="rounded-top-2"
@@ -141,19 +143,21 @@
           </div>
         </div>
       </div>
+      </div>
+
     </div>
 
-    <div class="bg-dark-subtle p-5">
-      <h4 class="text-center">MY PROJECT</h4>
+    <div class="bg-dark-subtle p-4 px-sm-4 px-md-3 px-lg-3">
+      <h4 class="text-center fw-semibold">MY PROJECT</h4>
       <div class="mt-5">
-        <div id="post" class="gap-2 d-flex flex-wrap">
+        <div id="post" class="gap-3 d-flex flex-wrap">
           {{#each dataProject}}
-            <div class="card p-3" style="width: 300px;">
+            <div class="card p-3 mx-auto" style="width: 280px;">
               <div>
                 <div>
                   <img
                     class="img-cover w-100 mb-2"
-                    style="height: 160px;"
+                    style="height: 160px"
                     src="{{this.image}}"
                     alt="image"
                   />
@@ -164,7 +168,6 @@
                       author :
                       {{this.author}}</span>
                   </div>
-
                 </div>
 
                 <a
@@ -173,17 +176,27 @@
                   href="/project-detail/{{this.id}}"
                 >
                   <span
-                    style="  -webkit-line-clamp:1;
+                    style="
+                    -webkit-line-clamp: 1;
                     overflow: hidden;
                     display: -webkit-box;
-                    -webkit-box-orient: vertical;font-size: large;"
+                    -webkit-box-orient: vertical;
+                    font-size: large;
+                  "
                   >{{this.name}}</span>
-
                 </a>
 
                 <p class="fw-lighter">durasi : {{this.duration}}</p>
                 <p
-                  style="text-align: justify; height: 50px; overflow: hidden ;"
+                  style="
+                  -webkit-line-clamp: 2;
+                  overflow: hidden;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  text-align: justify;
+
+                  height: 50px;
+                "
                 >
                   {{this.description}}
                 </p>
@@ -214,10 +227,8 @@
                   >delete</a>
                 </div>
               {{/if}}
-
             </div>
           {{/each}}
-
         </div>
       </div>
     </div>
