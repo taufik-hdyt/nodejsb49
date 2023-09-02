@@ -19,6 +19,7 @@
     />
     <style>
       *{ font-family: "Poppins" ,sans-serif; } a { text-decoration: none; }
+
     </style>
   </head>
   <body>
@@ -84,11 +85,11 @@
 
     <div class="bg-white">
       <div
-        class="container my-5 w-50 d-flex shadow-sm bg-dark-subtle rounded-2 p-4 gap-2"
+        class="container my-5 w-50 mx-auto row shadow-sm bg-dark-subtle rounded-2 p-3"
       >
-        <div>
+        <div class="col-7">
           <h2>Hi Welcome</h2>
-          <p>
+          <p style="text-align: justify;">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum
             hic delectus rem libero assumenda maiores non natus nihil inventore
             beatae quam ab pariatur voluptate, aliquid eligendi quidem
@@ -127,7 +128,7 @@
           </div>
         </div>
 
-        <div class="shadow-sm rounded-bottom-2 text-center">
+        <div class="shadow-sm rounded-bottom-2 text-center mt-5 col-5">
           <img
             width="100%"
             class="rounded-top-2"
@@ -156,17 +157,28 @@
                     src="{{this.image}}"
                     alt="image"
                   />
-                  <span class="bg-dark-subtle text-white px-2 w-100">author :
-                    {{this.author}}</span>
+                  <div class="d-flex">
+                    <span class="bg-dark-subtle text-black px-2 w-100"><i
+                        class="fa-solid fa-user"
+                      ></i>
+                      author :
+                      {{this.author}}</span>
+                  </div>
+
                 </div>
 
                 <a
                   target="_blank"
-                  style="overflow: hidden; text-overflow: ellipsi; white-space: nowrap; text-overflow: ellipsis;"
                   class="fw-bolder"
                   href="/project-detail/{{this.id}}"
                 >
-                  {{this.name}}
+                  <span
+                    style="  -webkit-line-clamp:1;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;font-size: large;"
+                  >{{this.name}}</span>
+
                 </a>
 
                 <p class="fw-lighter">durasi : {{this.duration}}</p>

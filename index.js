@@ -47,7 +47,7 @@ app.post("/contact", contactPost);
 app.get("/project-detail/:id", projectDetail);
 app.get("/delete-project/:id", deleteProject);
 app.get("/update-project/:id", updateProject);
-app.post("/update-project/:id", updateNewProject);
+app.post("/update-project/:id", upload.single("gambar"), updateNewProject);
 
 // server port
 app.listen(PORT, () => console.log(`Server running on port${PORT}`));
@@ -60,16 +60,21 @@ app.post("/register", async function (req, res) {
   try {
     const { name, email, password } = req.body;
     const query = `SELECT * FROM "Users" WHERE email='${email}'`;
-    await sequelize.query(query, { type: QueryTypes.SELECT });
-
+    const obj = await sequelize.query(query, { type: QueryTypes.SELECT });
     const salt = 10;
-    await bcrypt.hash(password, salt, (err, hashPassword) => {
-      sequelize.query(
-        `INSERT INTO "Users" (name,email,password, "createdAt","updatedAt") VALUES
-        ('${name}', '${email}','${hashPassword}',NOW(),NOW()) `
-      );
-      res.redirect("/login");
-    });
+
+    if (obj.find((e) => e.email === email)) {
+      req.flash("danger", "Email already exists");
+      return res.redirect("/register");
+    } else {
+      await bcrypt.hash(password, salt, (err, hashPassword) => {
+        sequelize.query(
+          `INSERT INTO "Users" (name,email,password, "createdAt","updatedAt") VALUES
+          ('${name}', '${email}','${hashPassword}',NOW(),NOW()) `
+        );
+        res.redirect("/login");
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -128,17 +133,15 @@ function contactPost(req, res) {
 async function home(req, res) {
   try {
     const query = `SELECT
+    "Projects".id,
     "Projects".name,"Users".name AS author,description,image,duration,technologies FROM
-    "Projects" LEFT JOIN "Users" ON "Projects".author = "Users".id ORDER BY "Projects".id `;
+    "Projects" LEFT JOIN "Users" ON "Projects".author = "Users".id ORDER BY "Projects".id DESC`;
     let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
     const data = obj.map((res) => ({
       ...res,
       isLogin: req.session.isLogin,
     }));
-
     const dataFilter = data.filter((e) => e.author === req.session.user);
-    console.log(req.session.user);
-
     if (!req.session.isLogin) {
       res.render("index", {
         dataProject: data,
@@ -209,10 +212,7 @@ async function addProject(req, res) {
     };
     await sequelize.query(`INSERT INTO "Projects" (author,name,description,start_date,end_date,duration,image,technologies) VALUES
     ('${author}','${name}','${description}','${startDate}','${endDate}','${durasi}','${image}','{"node_js": ${tech.node_js},"react_js":${tech.react_js},"php": ${tech.php},"javascript": ${tech.javascript}}')`);
-
-    setTimeout(() => {
-      res.redirect("/");
-    }, 10000);
+    res.redirect("/");
   } catch (err) {
     console.log(err);
   }
@@ -278,6 +278,7 @@ async function updateProject(req, res) {
       ...res,
     }));
     const methodPut = "put";
+
     if (req.session.user) {
       res.render("project", {
         methodPut,
@@ -292,21 +293,24 @@ async function updateProject(req, res) {
     console.log(err);
   }
 }
+
 async function updateNewProject(req, res) {
   try {
-    const { id } = req.params;
-
     const {
       name,
       startDate,
       endDate,
+      description,
       nodeJs,
       reactJs,
       php,
       javascript,
-      description,
-      gambar,
+      updateIMG,
     } = req.body;
+    console.log(updateIMG);
+    const author = req.session.idUser;
+    const { id } = req.params;
+
     const durasi = duration(startDate, endDate);
     const tech = {
       node_js: nodeJs === "on" ? true : false,
@@ -314,8 +318,21 @@ async function updateNewProject(req, res) {
       php: php === "on" ? true : false,
       javascript: javascript === "on" ? true : false,
     };
-    const query = `UPDATE "Projects" SET name=${name},description=${description},start_date=${startDate}, end_date=${endDate},duration=${durasi},image=${gambar},technologies='{"node_js":${tech.node_js},"react_js":${tech.react_js},
-    "php":${tech.php},"javascript":${tech.javascript}}' WHERE id=${id}`;
+    const query = `UPDATE "Projects" SET
+    author= ${author},
+    name='${name}',
+    description='${description}',
+    start_date='${startDate}',
+    end_date ='${endDate}',
+    duration='${durasi}',
+    image='${updateIMG}',
+    technologies='{
+    "php":${tech.php},
+    "javascript": ${tech.javascript},
+    "node_js": ${tech.node_js},
+    "react_js": ${tech.react_js}
+    }'
+    WHERE id= ${id}`;
     await sequelize.query(query);
     res.redirect("/");
   } catch (err) {

@@ -59,7 +59,10 @@
           <div class="d-flex align-items-center gap-3">
             <div class="d-flex gap-3 align-items-center">
               {{#if user}}
-                <text class="text-black fw-semibold">@{{user}}</text>
+                <div class="d-flex gap-1 align-items-center">
+                  <i class="fa-solid fa-user"></i>
+                  <text class="text-black fw-semibold">{{user}}</text>
+                </div>
               {{else}}
                 <a class="text-black" href="/register">Register</a>
               {{/if}}
@@ -173,13 +176,9 @@
           </form>
         {{/if}}
 
-        {{!-- {{#if this.methodPut}}
+        {{#if this.methodPut}}
           <h2 class="text-center">UPDATE PROJECT</h2>
-          <form
-            method="post"
-            action="/update-project/29"
-            enctype="multipart/form-data"
-          >
+          <form method="post" enctype="multipart/form-data">
             <div>
               <label for="name">Project Name</label>
               <input
@@ -296,9 +295,13 @@
             <!--  -->
 
             <div class="input-group mb-3 mt-3">
-              <div class="input-group">
+              <img
+                class="w-50 rounded-2"
+                src="/{{this.data.image}}"
+                alt="{{this.data.image}}"
+              />
+              <div class="input-group mt-2">
                 <input
-                  value="{{this.data.image}}"
                   name="gambar"
                   type="file"
                   class="form-control"
@@ -306,14 +309,21 @@
                   aria-describedby="inputGroupFileAddon04"
                   aria-label="Upload"
                 />
+
               </div>
+              <input
+                name="updateIMG"
+                style="visibility: hidden;"
+                type="text"
+                value="{{this.data.image}}"
+              />
             </div>
 
             <div class="d-flex justify-content-end">
               <button type="submit" class="btn btn-danger">Submit</button>
             </div>
           </form>
-        {{/if}} --}}
+        {{/if}}
 
       </div>
     </div>

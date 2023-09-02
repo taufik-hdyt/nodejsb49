@@ -65,7 +65,10 @@
           <div class="d-flex align-items-center gap-3">
             <div class="d-flex gap-3 align-items-center">
               {{#if user}}
-                <text class="text-black fw-semibold">@{{user}}</text>
+                <div class="d-flex gap-1 align-items-center">
+                  <i class="fa-solid fa-user"></i>
+                  <text class="text-black fw-semibold">{{user}}</text>
+                </div>
               {{else}}
                 <a class="text-black" href="/register">Register</a>
               {{/if}}
@@ -90,7 +93,8 @@
           <div class="col">
             <img
               class="w-100"
-              src="https://i.imgur.com/1dlelFG.jpg"
+              src="/{{data.image}}"
+              alt="{{data.image}}"
               alt="coding"
             />
           </div>

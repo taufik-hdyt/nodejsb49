@@ -89,6 +89,13 @@
               id="password"
             />
           </div>
+          {{#if messages.danger}}
+            <p
+              class="text-center bg-danger mt-3 p-1 rounded-2 text-white fw-semibold"
+            ><i class="fa-solid text-white fa-circle-exclamation"></i>
+              {{messages.danger}}</p>
+          {{/if}}
+
           <div class="d-flex justify-content-end mt-4">
             <button type="submit" class="px-4 btn btn-danger">Register</button>
           </div>
