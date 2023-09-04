@@ -87,15 +87,13 @@ app.post("/login", async function (req, res) {
     const { email, password } = req.body;
     const query = `SELECT * FROM "Users" WHERE email='${email}'`;
     let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
-    console.log(obj);
     if (!obj.length) {
       req.flash("danger", "User not registered");
       return res.redirect("/login");
     }
-
     await bcrypt.compare(password, obj[0].password, (err, result) => {
       if (!result) {
-        req.flash("danger", "Password wrong");
+        req.flash("danger", "Wrong password!");
         return res.redirect("/login");
       } else {
         req.session.isLogin = true;
